@@ -1,0 +1,43 @@
+services:
+  mc:
+    image: itzg/minecraft-server
+    container_name: minecraft
+    tty: true
+    stdin_open: true
+    ports:
+      - "25565:25565"
+      - "24454:24454/udp"
+    entrypoint: sh -c "cp -r /configs/* /data/plugins/ && chown -R minecraft:minecraft /data/plugins/ && /start"
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      MEMORY: "4g"
+      MODRINTH_PROJECTS: |
+        simple-voice-chat
+        coreprotect:llmrc4cl
+        discordsrv
+        discordsrv-commands-extension:xNANgK2O
+        interactivechat
+        interactivechat-discordsrv-addon
+      # selected latest coreprotect version manually because 1.21 doesn't exist yet
+      SPIGET_RESOURCES: "85811,82342,62325,106031"
+      SERVER_NAME: "vaporvee's Minecraft-Server"
+      ICON: "https://i.ytimg.com/vi/vpKc4X1m8Yo/hq720.jpg"
+      MOTD: "§1Yannik's crazy Minecraft-Server, der §1§ldefinitiv länger§1 als 2 Wochen hält! Jaaaa...."
+      MAX_PLAYERS: "420"
+      ENABLE_WHITELIST: "true"
+      WHITELIST: "f396e2b9-cbb1-46a0-bb72-96898a1ca44d"
+      DIFFICULTY: "NORMAL"
+      VIEW_DISTANCE: "128"
+      SPAWN_PROTECTION: "0"
+      ENABLE_COMMAND_BLOCK: "true"
+      REPLACE_ENV_VARIABLES: "TRUE"
+      ENV_VARIABLE_PREFIX: "CFG_"
+      CFG_DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      CFG_DISCORD_GLOBAL_CHANNEL_ID: ${DISCORD_GLOBAL_CHANNEL_ID}
+      CFG_DISCORD_CONSOLE_CHANNEL_ID: ${DISCORD_CONSOLE_CHANNEL_ID}
+    volumes:
+      - ./data:/data
+      - ./plugins:/plugins
+
+# `docker exec -i minecraft rcon-cli` to access the console
